@@ -5,8 +5,10 @@ module Spree
     before_action :set_locale
 
     def set_locale
-      if session.key?(:currency) != current_store.code.upcase
+
+      if session.key?(:currency) && session[:currency] != current_store.code.upcase
         session[:currency] = current_store.code.upcase
+        params[:currency] = current_store.code.upcase
       end
 
       # Keep the store currency and order currency in sync
@@ -16,6 +18,7 @@ module Spree
           (cookies[:preferred_currency] = { value: current_order.currency, expires: 1.year.from_now })
         end
       end
+
     end
 
   end
