@@ -6,11 +6,15 @@ module Spree
 
     def set_locale
 
+      # Set the session and params currency to match store currency
       if session.key?(:currency) && session[:currency] != current_store.code.upcase
         session[:currency] = current_store.code.upcase
-        params[:currency] = current_store.code.upcase
       end
 
+      if params[:currency] != session[:currency]
+        params[:currency] = session[:currency]
+      end
+      
       # Keep the store currency and order currency in sync
       if current_order
         if current_order.currency != current_currency
