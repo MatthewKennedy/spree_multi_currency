@@ -8,6 +8,14 @@ module Spree
       if session.key?(:currency) != current_store.code.upcase
         session[:currency] = current_store.code.upcase
       end
+
+      # Keep the store currency and order currency in sync
+      if current_order
+        if current_order.currency != current_currency
+          params[:currency] = current_order.currency
+          (cookies[:preferred_currency] = { value: current_order.currency, expires: 1.year.from_now })
+        end
+      end
     end
 
   end
